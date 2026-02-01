@@ -10,6 +10,12 @@ export default defineNuxtConfig({
 
   ssr: false,
 
+  runtimeConfig: {
+    public: {
+      wordnikApiKey: ''
+    }
+  },
+
   devtools: {
     enabled: true
   },
@@ -71,6 +77,17 @@ export default defineNuxtConfig({
             expiration: {
               maxEntries: 200,
               maxAgeSeconds: 60 * 60 * 24 * 90
+            }
+          }
+        },
+        {
+          urlPattern: /^https:\/\/api\.wordnik\.com\/v4\/word\.json\/.*/i,
+          handler: 'StaleWhileRevalidate',
+          options: {
+            cacheName: 'wordnik-api-cache',
+            expiration: {
+              maxEntries: 500,
+              maxAgeSeconds: 60 * 60 * 24 * 7
             }
           }
         }

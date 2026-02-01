@@ -176,6 +176,8 @@ function getHostname(url: string): string {
         />
       </div>
 
+      <WordExamples :examples="searchStore.wordExamples" />
+
       <USeparator v-if="allSynonyms.length > 0 || allAntonyms.length > 0" />
 
       <WordRelated

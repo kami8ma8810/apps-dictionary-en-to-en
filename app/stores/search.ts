@@ -2,6 +2,7 @@ import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import { FreeDictionaryApi } from '~/services/freeDictionaryApi'
 import { fetchSpellingSuggestions } from '~/services/datamuseApi'
+import { fetchWordExamples } from '~/services/wordnikApi'
 import type { DictionaryResult } from '~/types/dictionary'
 import type { SearchStatus } from '~/types/ui'
 import type { DictionaryService } from '~/types/service'
@@ -12,6 +13,7 @@ const useSearchStore = defineStore('search', () => {
   const status = ref<SearchStatus>('idle')
   const errorMessage = ref('')
   const suggestions = ref<string[]>([])
+  const wordExamples = ref<string[]>([])
 
   async function search(word: string, service: DictionaryService = new FreeDictionaryApi()) {
     if (!word.trim()) return
@@ -21,10 +23,20 @@ const useSearchStore = defineStore('search', () => {
     result.value = null
     errorMessage.value = ''
     suggestions.value = []
+    wordExamples.value = []
 
     try {
       result.value = await service.search(word)
       status.value = 'success'
+      // 定義の表示をブロックしないよう非同期で例文を取得
+      const apiKey = useRuntimeConfig().public.wordnikApiKey as string
+      const searchedWord = query.value
+      void fetchWordExamples(searchedWord, apiKey).then((examples) => {
+        // 検索中にクエリが変わっていたら古い結果を無視
+        if (query.value === searchedWord) {
+          wordExamples.value = examples
+        }
+      })
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error'
 
@@ -47,6 +59,7 @@ const useSearchStore = defineStore('search', () => {
     status.value = 'idle'
     errorMessage.value = ''
     suggestions.value = []
+    wordExamples.value = []
   }
 
   return {
@@ -55,6 +68,7 @@ const useSearchStore = defineStore('search', () => {
     status,
     errorMessage,
     suggestions,
+    wordExamples,
     search,
     reset
   }

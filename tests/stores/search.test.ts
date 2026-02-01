@@ -3,13 +3,25 @@ import { flushPromises } from '@vue/test-utils'
 import { setActivePinia, createPinia } from 'pinia'
 import { useSearchStore } from '~/stores/search'
 import { fetchSpellingSuggestions } from '~/services/datamuseApi'
+import { fetchWordExamples } from '~/services/wordnikApi'
 import type { DictionaryService } from '~/types/service'
 
 vi.mock('~/services/datamuseApi', () => ({
   fetchSpellingSuggestions: vi.fn().mockResolvedValue([])
 }))
 
+vi.mock('~/services/wordnikApi', () => ({
+  fetchWordExamples: vi.fn().mockResolvedValue([])
+}))
+
+vi.stubGlobal('useRuntimeConfig', () => ({
+  public: {
+    wordnikApiKey: 'test-api-key'
+  }
+}))
+
 const mockFetchSuggestions = vi.mocked(fetchSpellingSuggestions)
+const mockFetchWordExamples = vi.mocked(fetchWordExamples)
 
 function createMockService(): DictionaryService {
   return {
@@ -35,6 +47,7 @@ describe('useSearchStore', () => {
   beforeEach(() => {
     setActivePinia(createPinia())
     mockFetchSuggestions.mockClear()
+    mockFetchWordExamples.mockClear()
   })
 
   it('should start with idle status and empty query', () => {
@@ -165,6 +178,83 @@ describe('useSearchStore', () => {
       const successService = createMockService()
       await store.search('hello', successService)
       expect(store.suggestions).toEqual([])
+    })
+  })
+
+  describe('wordExamples', () => {
+    it('should start with empty wordExamples', () => {
+      const store = useSearchStore()
+      expect(store.wordExamples).toEqual([])
+    })
+
+    it('should fetch word examples on successful search', async () => {
+      mockFetchWordExamples.mockResolvedValueOnce(['Example sentence 1', 'Example sentence 2'])
+      const service = createMockService()
+      const store = useSearchStore()
+
+      await store.search('hello', service)
+      await flushPromises()
+
+      expect(store.status).toBe('success')
+      expect(mockFetchWordExamples).toHaveBeenCalledWith('hello', 'test-api-key')
+      expect(store.wordExamples).toEqual(['Example sentence 1', 'Example sentence 2'])
+    })
+
+    it('should not fetch word examples on not-found', async () => {
+      const service: DictionaryService = {
+        search: vi.fn().mockRejectedValue(new Error('No Definitions Found'))
+      }
+      const store = useSearchStore()
+
+      await store.search('xyznotaword', service)
+      await flushPromises()
+
+      expect(store.status).toBe('not-found')
+      expect(mockFetchWordExamples).not.toHaveBeenCalled()
+    })
+
+    it('should not fetch word examples on generic error', async () => {
+      const service: DictionaryService = {
+        search: vi.fn().mockRejectedValue(new Error('Network error'))
+      }
+      const store = useSearchStore()
+
+      await store.search('hello', service)
+      await flushPromises()
+
+      expect(store.status).toBe('error')
+      expect(mockFetchWordExamples).not.toHaveBeenCalled()
+    })
+
+    it('should clear wordExamples on reset', async () => {
+      mockFetchWordExamples.mockResolvedValueOnce(['Example sentence'])
+      const service = createMockService()
+      const store = useSearchStore()
+
+      await store.search('hello', service)
+      await flushPromises()
+      expect(store.wordExamples).toEqual(['Example sentence'])
+
+      store.reset()
+      expect(store.wordExamples).toEqual([])
+    })
+
+    it('should clear wordExamples before a new search', async () => {
+      mockFetchWordExamples.mockResolvedValueOnce(['Old example'])
+      const service = createMockService()
+      const store = useSearchStore()
+
+      await store.search('hello', service)
+      await flushPromises()
+      expect(store.wordExamples).toEqual(['Old example'])
+
+      // 2回目の検索では新しい例文に置き換わる
+      mockFetchWordExamples.mockResolvedValueOnce(['New example'])
+      await store.search('world', service)
+      await flushPromises()
+      expect(store.wordExamples).toEqual(['New example'])
+      // 2回目の呼び出しが 'world' で行われたことを確認
+      expect(mockFetchWordExamples).toHaveBeenLastCalledWith('world', 'test-api-key')
     })
   })
 })
