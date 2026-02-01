@@ -2,13 +2,13 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { flushPromises } from '@vue/test-utils'
 import { setActivePinia, createPinia } from 'pinia'
 import { useSearchStore } from '~/stores/search'
+import { fetchSpellingSuggestions } from '~/services/datamuseApi'
 import type { DictionaryService } from '~/types/service'
 
 vi.mock('~/services/datamuseApi', () => ({
   fetchSpellingSuggestions: vi.fn().mockResolvedValue([])
 }))
 
-import { fetchSpellingSuggestions } from '~/services/datamuseApi'
 const mockFetchSuggestions = vi.mocked(fetchSpellingSuggestions)
 
 function createMockService(): DictionaryService {
