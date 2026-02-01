@@ -19,7 +19,7 @@ function isActive(to: string): boolean {
   <div class="flex min-h-screen flex-col bg-(--ui-bg)">
     <!-- Header -->
     <header class="sticky top-0 z-50 border-b border-(--ui-border) bg-(--ui-bg)">
-      <div class="mx-auto flex h-12 max-w-3xl items-center justify-between px-4">
+      <div class="mx-auto flex h-12 max-w-5xl items-center justify-between px-4">
         <NuxtLink
           to="/"
           class="text-lg font-bold text-(--ui-text-highlighted)"
@@ -61,7 +61,7 @@ function isActive(to: string): boolean {
         id="main-content"
         class="min-h-0 flex-1 px-4 py-6 pb-20 md:pb-6"
       >
-        <div class="mx-auto max-w-2xl">
+        <div>
           <slot />
         </div>
       </main>
