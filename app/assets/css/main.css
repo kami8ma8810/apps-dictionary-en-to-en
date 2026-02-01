@@ -19,3 +19,10 @@
   --ui-text-muted: #d1d5db;    /* gray-300 */
   --ui-text-dimmed: #9ca3af;   /* gray-400 */
 }
+
+button,
+[role="button"],
+a,
+summary {
+  cursor: pointer;
+}

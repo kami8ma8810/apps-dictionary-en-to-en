@@ -10,6 +10,7 @@ const props = defineProps<{
 const emit = defineEmits<{
   toggleBookmark: []
   playAudio: [url: string]
+  playAudioSlow: [url: string]
 }>()
 
 const phonetic = computed(() => {
@@ -46,6 +47,15 @@ const audioUrl = computed(() => {
           size="sm"
           :aria-label="`Play pronunciation of ${word}`"
           @click="emit('playAudio', audioUrl)"
+        />
+        <UButton
+          v-if="audioUrl"
+          icon="i-lucide-turtle"
+          variant="ghost"
+          color="neutral"
+          size="sm"
+          :aria-label="`Play pronunciation of ${word} slowly`"
+          @click="emit('playAudioSlow', audioUrl)"
         />
       </div>
     </div>

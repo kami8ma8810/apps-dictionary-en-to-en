@@ -17,6 +17,7 @@ const emit = defineEmits<{
     <div v-if="synonyms.length > 0">
       <p class="mb-1.5 text-sm font-medium text-(--ui-text-muted)">
         Synonyms
+        <span class="text-xs font-normal text-(--ui-text-dimmed)">— words with similar meaning</span>
       </p>
       <div class="flex flex-wrap gap-1.5">
         <UButton
@@ -33,6 +34,7 @@ const emit = defineEmits<{
     <div v-if="antonyms.length > 0">
       <p class="mb-1.5 text-sm font-medium text-(--ui-text-muted)">
         Antonyms
+        <span class="text-xs font-normal text-(--ui-text-dimmed)">— words with opposite meaning</span>
       </p>
       <div class="flex flex-wrap gap-1.5">
         <UButton

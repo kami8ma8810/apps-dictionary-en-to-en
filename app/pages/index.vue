@@ -2,22 +2,22 @@
 const router = useRouter()
 const searchStore = useSearchStore()
 const historyStore = useHistoryStore()
+const bookmarkStore = useBookmarkStore()
 
 const searchQuery = ref('')
 
 onMounted(async () => {
-  await historyStore.loadRecent(10)
+  await bookmarkStore.loadAll()
 })
 
 async function handleSearch(word: string) {
   await historyStore.add(word)
-  await historyStore.loadRecent(10)
   router.push(`/word/${encodeURIComponent(word)}`)
 }
 
-async function handleRemoveHistory(id: number) {
-  await historyStore.remove(id)
-  await historyStore.loadRecent(10)
+async function handleRemoveBookmark(word: string) {
+  await bookmarkStore.remove(word)
+  await bookmarkStore.loadAll()
 }
 </script>
 
@@ -41,10 +41,18 @@ async function handleRemoveHistory(id: number) {
       <span v-if="searchStore.status === 'loading'">Searching...</span>
     </div>
 
-    <SearchSuggestions
-      :entries="historyStore.entries"
-      @select="handleSearch"
-      @remove="handleRemoveHistory"
-    />
+    <div v-if="bookmarkStore.bookmarks.length > 0">
+      <p class="mb-2 text-sm font-medium text-(--ui-text-muted)">
+        Bookmarks
+      </p>
+      <div class="space-y-2">
+        <BookmarkCard
+          v-for="bookmark in bookmarkStore.bookmarks"
+          :key="bookmark.id"
+          :bookmark="bookmark"
+          @remove="handleRemoveBookmark"
+        />
+      </div>
+    </div>
   </div>
 </template>

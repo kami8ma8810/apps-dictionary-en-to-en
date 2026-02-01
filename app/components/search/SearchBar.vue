@@ -1,22 +1,13 @@
 <script setup lang="ts">
-import { useDebounceFn } from '@vueuse/core'
-
 const model = defineModel<string>({ default: '' })
 
 const emit = defineEmits<{
   search: [word: string]
 }>()
 
-const debouncedSearch = useDebounceFn((value: string) => {
-  if (value.trim()) {
-    emit('search', value.trim())
-  }
-}, 300)
-
 function handleInput(event: Event) {
   const target = event.target as HTMLInputElement
   model.value = target.value
-  debouncedSearch(target.value)
 }
 
 function handleSubmit() {

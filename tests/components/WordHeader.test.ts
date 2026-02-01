@@ -63,4 +63,31 @@ describe('WordHeader a11y', () => {
     )
     expect(audioBtn).toBeTruthy()
   })
+
+  it('should have slow play button when audio is available', () => {
+    const { container } = render(WordHeader, {
+      ...globalStubs,
+      props: defaultProps
+    })
+    const buttons = container.querySelectorAll('button')
+    const slowBtn = Array.from(buttons).find(b =>
+      b.getAttribute('aria-label')?.includes('slowly')
+    )
+    expect(slowBtn).toBeTruthy()
+  })
+
+  it('should not show slow play button when no audio', () => {
+    const { container } = render(WordHeader, {
+      ...globalStubs,
+      props: {
+        ...defaultProps,
+        phonetics: [{ text: '/həˈloʊ/' }]
+      }
+    })
+    const buttons = container.querySelectorAll('button')
+    const slowBtn = Array.from(buttons).find(b =>
+      b.getAttribute('aria-label')?.includes('slowly')
+    )
+    expect(slowBtn).toBeFalsy()
+  })
 })

@@ -34,7 +34,7 @@ function isActive(to: string): boolean {
     <div class="mx-auto flex w-full max-w-5xl flex-1">
       <!-- Sidebar (desktop only) -->
       <nav
-        class="hidden w-48 shrink-0 border-r border-(--ui-border) p-4 md:block"
+        class="hidden w-48 shrink-0 border-r border-(--ui-border) p-4 md:sticky md:top-12 md:block md:h-[calc(100vh-3rem)] md:overflow-y-auto"
         aria-label="Main navigation"
       >
         <ul class="space-y-1">
