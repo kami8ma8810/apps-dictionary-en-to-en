@@ -23,14 +23,43 @@ async function handleToggleBookmark() {
   isBookmarked.value = await bookmarkStore.isBookmarked(word.value)
 }
 
-function handlePlayAudio(url: string) {
+let currentAudio: HTMLAudioElement | null = null
+
+function playAudio(url: string, rate: number = 1) {
+  if (currentAudio) {
+    currentAudio.pause()
+    currentAudio = null
+  }
   const audio = new Audio(url)
-  audio.play()
+  audio.playbackRate = rate
+  audio.play().catch(() => { /* ユーザー操作外での再生拒否を無視 */ })
+  currentAudio = audio
+  audio.addEventListener('ended', () => { currentAudio = null })
+}
+
+function handlePlayAudio(url: string) {
+  playAudio(url, 1)
+}
+
+function handlePlayAudioSlow(url: string) {
+  playAudio(url, 0.5)
 }
 
 async function handleSelectRelatedWord(relatedWord: string) {
   await historyStore.add(relatedWord)
   router.push(`/word/${encodeURIComponent(relatedWord)}`)
+}
+
+async function handleSelectSuggestion(suggestion: string) {
+  await historyStore.add(suggestion)
+  router.push(`/word/${encodeURIComponent(suggestion)}`)
+}
+
+const retryQuery = ref('')
+
+async function handleRetrySearch(query: string) {
+  await historyStore.add(query)
+  router.push(`/word/${encodeURIComponent(query)}`)
 }
 
 const firstEntry = computed(() => searchStore.result?.entries[0])
@@ -77,24 +106,51 @@ function getHostname(url: string): string {
       <span v-if="searchStore.status === 'success' && firstEntry">
         Definition found for {{ word }}. {{ firstEntry.meanings.length }} meaning groups.
       </span>
-      <span v-if="searchStore.status === 'not-found'">No definition found for {{ word }}.</span>
+      <span v-if="searchStore.status === 'not-found'">
+        No definition found for {{ word }}.
+        <template v-if="searchStore.suggestions.length > 0">
+          Did you mean: {{ searchStore.suggestions.join(', ') }}?
+        </template>
+      </span>
     </div>
 
     <!-- Not found -->
-    <CommonEmptyState
-      v-if="searchStore.status === 'not-found'"
-      icon="i-lucide-search-x"
-      title="No definitions found"
-      :description="`We couldn't find a definition for '${word}'.`"
-    />
+    <div v-if="searchStore.status === 'not-found'" class="space-y-6">
+      <CommonEmptyState
+        icon="i-lucide-search-x"
+        title="No definitions found"
+        :description="`We couldn't find a definition for '${word}'.`"
+      />
+      <div
+        v-if="searchStore.suggestions.length > 0"
+        role="region"
+        aria-label="Spelling suggestions"
+        class="space-y-2"
+      >
+        <p class="text-sm text-(--ui-text-muted)">Did you mean:</p>
+        <div class="flex flex-wrap gap-2">
+          <UButton
+            v-for="suggestion in searchStore.suggestions"
+            :key="suggestion"
+            variant="outline"
+            size="sm"
+            :label="suggestion"
+            @click="handleSelectSuggestion(suggestion)"
+          />
+        </div>
+      </div>
+      <SearchBar v-model="retryQuery" @search="handleRetrySearch" />
+    </div>
 
     <!-- Error -->
-    <CommonErrorDisplay
-      v-if="searchStore.status === 'error'"
-      :message="searchStore.errorMessage"
-      retryable
-      @retry="searchStore.search(word)"
-    />
+    <div v-if="searchStore.status === 'error'" class="space-y-6">
+      <CommonErrorDisplay
+        :message="searchStore.errorMessage"
+        retryable
+        @retry="searchStore.search(word)"
+      />
+      <SearchBar v-model="retryQuery" @search="handleRetrySearch" />
+    </div>
 
     <!-- Word detail -->
     <div
@@ -107,6 +163,7 @@ function getHostname(url: string): string {
         :bookmarked="isBookmarked"
         @toggle-bookmark="handleToggleBookmark"
         @play-audio="handlePlayAudio"
+        @play-audio-slow="handlePlayAudioSlow"
       />
 
       <USeparator />

@@ -1,6 +1,7 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import { FreeDictionaryApi } from '~/services/freeDictionaryApi'
+import { fetchSpellingSuggestions } from '~/services/datamuseApi'
 import type { DictionaryResult } from '~/types/dictionary'
 import type { SearchStatus } from '~/types/ui'
 import type { DictionaryService } from '~/types/service'
@@ -10,6 +11,7 @@ const useSearchStore = defineStore('search', () => {
   const result = ref<DictionaryResult | null>(null)
   const status = ref<SearchStatus>('idle')
   const errorMessage = ref('')
+  const suggestions = ref<string[]>([])
 
   async function search(word: string, service: DictionaryService = new FreeDictionaryApi()) {
     if (!word.trim()) return
@@ -18,6 +20,7 @@ const useSearchStore = defineStore('search', () => {
     status.value = 'loading'
     result.value = null
     errorMessage.value = ''
+    suggestions.value = []
 
     try {
       result.value = await service.search(word)
@@ -27,6 +30,10 @@ const useSearchStore = defineStore('search', () => {
 
       if (message === 'No Definitions Found') {
         status.value = 'not-found'
+        // not-found の描画をブロックしないよう非同期で候補を取得
+        void fetchSpellingSuggestions(query.value).then((result) => {
+          suggestions.value = result
+        })
       } else {
         status.value = 'error'
       }
@@ -39,6 +46,7 @@ const useSearchStore = defineStore('search', () => {
     result.value = null
     status.value = 'idle'
     errorMessage.value = ''
+    suggestions.value = []
   }
 
   return {
@@ -46,6 +54,7 @@ const useSearchStore = defineStore('search', () => {
     result,
     status,
     errorMessage,
+    suggestions,
     search,
     reset
   }
