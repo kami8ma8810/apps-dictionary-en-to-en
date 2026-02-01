@@ -24,8 +24,8 @@ export default defineNuxtConfig({
   pwa: {
     registerType: 'autoUpdate',
     manifest: {
-      name: 'English-to-English Dictionary',
-      short_name: 'EN Dict',
+      name: 'EN-to-EN Dictionary',
+      short_name: 'EN-to-EN',
       description: 'Look up English words with English definitions',
       theme_color: '#ffffff',
       background_color: '#ffffff',

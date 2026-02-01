@@ -24,7 +24,7 @@ function isActive(to: string): boolean {
           to="/"
           class="text-lg font-bold text-(--ui-text-highlighted)"
         >
-          EN Dictionary
+          EN-to-EN Dictionary
         </NuxtLink>
         <UColorModeButton />
       </div>
