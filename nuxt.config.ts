@@ -32,14 +32,16 @@ export default defineNuxtConfig({
       display: 'standalone',
       icons: [
         {
-          src: '/icon-192x192.png',
-          sizes: '192x192',
-          type: 'image/png'
+          src: '/icon.svg',
+          sizes: 'any',
+          type: 'image/svg+xml',
+          purpose: 'any'
         },
         {
-          src: '/icon-512x512.png',
-          sizes: '512x512',
-          type: 'image/png'
+          src: '/icon.svg',
+          sizes: 'any',
+          type: 'image/svg+xml',
+          purpose: 'maskable'
         }
       ]
     },
@@ -55,6 +57,17 @@ export default defineNuxtConfig({
             expiration: {
               maxEntries: 500,
               maxAgeSeconds: 60 * 60 * 24 * 30
+            }
+          }
+        },
+        {
+          urlPattern: /^https:\/\/api\.dictionaryapi\.dev\/media\/pronunciations\/.*/i,
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'pronunciation-audio-cache',
+            expiration: {
+              maxEntries: 200,
+              maxAgeSeconds: 60 * 60 * 24 * 90
             }
           }
         }
