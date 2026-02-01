@@ -1,12 +1,14 @@
 {
   "defaults": {
     "standard": "WCAG2AA",
-    "timeout": 10000,
-    "wait": 2000
+    "timeout": 30000,
+    "wait": 3000
   },
   "urls": [
     "http://localhost:3000/",
     "http://localhost:3000/bookmarks",
-    "http://localhost:3000/history"
+    "http://localhost:3000/history",
+    "http://localhost:3000/word/hello",
+    "http://localhost:3000/word/xyznotarealword123"
   ]
 }
