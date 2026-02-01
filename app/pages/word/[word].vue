@@ -44,6 +44,15 @@ const allAntonyms = computed(() => {
   if (!firstEntry.value) return []
   return [...new Set(firstEntry.value.meanings.flatMap(m => m.antonyms))]
 })
+
+function getHostname(url: string): string {
+  try {
+    return new URL(url).hostname
+  }
+  catch {
+    return url
+  }
+}
 </script>
 
 <template>
@@ -92,7 +101,7 @@ const allAntonyms = computed(() => {
       v-if="searchStore.status === 'success' && firstEntry"
       class="space-y-6"
     >
-      <WordWordHeader
+      <WordHeader
         :word="firstEntry.word"
         :phonetics="firstEntry.phonetics"
         :bookmarked="isBookmarked"
@@ -103,7 +112,7 @@ const allAntonyms = computed(() => {
       <USeparator />
 
       <div class="space-y-6">
-        <WordWordMeaning
+        <WordMeaning
           v-for="(meaning, index) in firstEntry.meanings"
           :key="index"
           :meaning="meaning"
@@ -112,7 +121,7 @@ const allAntonyms = computed(() => {
 
       <USeparator v-if="allSynonyms.length > 0 || allAntonyms.length > 0" />
 
-      <WordWordRelated
+      <WordRelated
         :synonyms="allSynonyms"
         :antonyms="allAntonyms"
         @select-word="handleSelectRelatedWord"
@@ -132,7 +141,7 @@ const allAntonyms = computed(() => {
             rel="noopener noreferrer"
             class="underline"
           >
-            {{ new URL(url).hostname }}
+            {{ getHostname(url) }}
           </a>
         </p>
       </div>

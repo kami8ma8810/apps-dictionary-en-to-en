@@ -46,10 +46,11 @@ function isActive(to: string): boolean {
               :to="item.to"
               :icon="item.icon"
               :label="item.label"
-              :variant="isActive(item.to) ? 'soft' : 'ghost'"
-              :color="isActive(item.to) ? 'primary' : 'neutral'"
+              variant="ghost"
+              color="neutral"
               block
               class="justify-start"
+              :class="isActive(item.to) ? 'font-bold bg-(--ui-bg-elevated)' : ''"
             />
           </li>
         </ul>
@@ -79,7 +80,7 @@ function isActive(to: string): boolean {
           <NuxtLink
             :to="item.to"
             class="flex flex-col items-center gap-0.5 px-4 py-1"
-            :class="isActive(item.to) ? 'text-(--ui-primary)' : 'text-(--ui-text-muted)'"
+            :class="isActive(item.to) ? 'text-(--ui-text-highlighted) font-bold' : 'text-(--ui-text-muted)'"
           >
             <UIcon
               :name="item.icon"

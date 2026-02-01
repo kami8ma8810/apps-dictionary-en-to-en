@@ -16,8 +16,8 @@ const emit = defineEmits<{
   <div class="flex items-center gap-2 overflow-x-auto pb-2">
     <UButton
       label="All"
-      :variant="activeFolderId === null ? 'soft' : 'outline'"
-      :color="activeFolderId === null ? 'primary' : 'neutral'"
+      :variant="activeFolderId === null ? 'solid' : 'outline'"
+      :color="activeFolderId === null ? 'neutral' : 'neutral'"
       size="sm"
       @click="emit('select', null)"
     />
@@ -25,8 +25,8 @@ const emit = defineEmits<{
       v-for="folder in folders"
       :key="folder.id"
       :label="folder.name"
-      :variant="activeFolderId === folder.id ? 'soft' : 'outline'"
-      :color="activeFolderId === folder.id ? 'primary' : 'neutral'"
+      :variant="activeFolderId === folder.id ? 'solid' : 'outline'"
+      :color="'neutral'"
       size="sm"
       @click="emit('select', folder.id!)"
     />

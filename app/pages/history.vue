@@ -24,7 +24,7 @@ async function handleClearAll() {
 
 <template>
   <div>
-    <HistoryHistoryList
+    <HistoryList
       :entries="historyStore.entries"
       @select="handleSelect"
       @remove="handleRemove"

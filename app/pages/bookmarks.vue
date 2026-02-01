@@ -39,7 +39,7 @@ function handleSelectFolder(folderId: number | null) {
     />
 
     <div class="space-y-2">
-      <BookmarkBookmarkCard
+      <BookmarkCard
         v-for="bookmark in bookmarkStore.bookmarks"
         :key="bookmark.id"
         :bookmark="bookmark"

@@ -27,7 +27,7 @@ async function handleRemoveHistory(id: number) {
       <h1 class="mb-6 text-2xl font-bold text-(--ui-text-highlighted)">
         English-to-English Dictionary
       </h1>
-      <SearchSearchBar
+      <SearchBar
         v-model="searchQuery"
         @search="handleSearch"
       />
@@ -41,7 +41,7 @@ async function handleRemoveHistory(id: number) {
       <span v-if="searchStore.status === 'loading'">Searching...</span>
     </div>
 
-    <SearchSearchSuggestions
+    <SearchSuggestions
       :entries="historyStore.entries"
       @select="handleSearch"
       @remove="handleRemoveHistory"
