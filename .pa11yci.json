@@ -1,0 +1,12 @@
+{
+  "defaults": {
+    "standard": "WCAG2AA",
+    "timeout": 10000,
+    "wait": 2000
+  },
+  "urls": [
+    "http://localhost:3000/",
+    "http://localhost:3000/bookmarks",
+    "http://localhost:3000/history"
+  ]
+}
