@@ -1,60 +1,92 @@
-# Nuxt Starter Template
+# EN-to-EN Dictionary
 
 [![Nuxt UI](https://img.shields.io/badge/Made%20with-Nuxt%20UI-00DC82?logo=nuxt&labelColor=020420)](https://ui.nuxt.com)
 
-Use this template to get started with [Nuxt UI](https://ui.nuxt.com) quickly.
+English-to-English dictionary PWA. Look up words using English definitions instead of translating to your native language.
 
-- [Live demo](https://starter-template.nuxt.dev/)
-- [Documentation](https://ui.nuxt.com/docs/getting-started/installation/nuxt)
+## Tech Stack
 
-<a href="https://starter-template.nuxt.dev/" target="_blank">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://ui.nuxt.com/assets/templates/nuxt/starter-dark.png">
-    <source media="(prefers-color-scheme: light)" srcset="https://ui.nuxt.com/assets/templates/nuxt/starter-light.png">
-    <img alt="Nuxt Starter Template" src="https://ui.nuxt.com/assets/templates/nuxt/starter-light.png">
-  </picture>
-</a>
+| Category | Choice |
+|----------|--------|
+| Framework | Nuxt 4 (Vue 3) / SPA (`ssr: false`) |
+| Language | TypeScript (strict) |
+| State | Pinia (Setup Store) |
+| IndexedDB | Dexie.js |
+| UI | Nuxt UI v3 (Reka UI) |
+| PWA | @vite-pwa/nuxt |
+| Utility | VueUse |
+| Dictionary API | Free Dictionary API |
+| Examples API | Wordnik API |
+| Spelling API | Datamuse API |
+| Unit Test | Vitest + vitest-axe + @testing-library/vue |
+| E2E Test | Playwright + @axe-core/playwright |
 
-> The starter template for Vue is on https://github.com/nuxt-ui-templates/starter-vue.
+## Features
 
-## Quick Start
-
-```bash [Terminal]
-npm create nuxt@latest -- -t github:nuxt-ui-templates/starter
-```
-
-## Deploy your own
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-name=starter&repository-url=https%3A%2F%2Fgithub.com%2Fnuxt-ui-templates%2Fstarter&demo-image=https%3A%2F%2Fui.nuxt.com%2Fassets%2Ftemplates%2Fnuxt%2Fstarter-dark.png&demo-url=https%3A%2F%2Fstarter-template.nuxt.dev%2F&demo-title=Nuxt%20Starter%20Template&demo-description=A%20minimal%20template%20to%20get%20started%20with%20Nuxt%20UI.)
+- Search English words and view English definitions
+- Phonetic notation and audio pronunciation (normal / slow speed)
+- Example sentences from Wordnik API (collapsible)
+- Synonyms and antonyms display
+- Spelling suggestions on not-found (Datamuse API)
+- Bookmark and search history (IndexedDB)
+- Folder-based bookmark organization
+- PWA with offline caching (Workbox)
+- WCAG 2.2 AA accessibility
 
 ## Setup
-
-Make sure to install the dependencies:
 
 ```bash
 pnpm install
 ```
 
-## Development Server
+### Environment Variables
 
-Start the development server on `http://localhost:3000`:
+Copy `.env.example` and set your API keys:
+
+```bash
+cp .env.example .env
+```
+
+| Variable | Description |
+|----------|-------------|
+| `NUXT_PUBLIC_WORDNIK_API_KEY` | Wordnik API key for example sentences |
+
+## Development
 
 ```bash
 pnpm dev
 ```
 
-## Production
+## Test
 
-Build the application for production:
+```bash
+pnpm test          # unit tests
+pnpm test:watch    # watch mode
+pnpm test:e2e      # Playwright E2E
+pnpm test:a11y     # pa11y accessibility
+pnpm typecheck     # TypeScript type check
+```
+
+## Build
 
 ```bash
 pnpm build
+pnpm preview       # preview production build
 ```
 
-Locally preview production build:
+## Project Structure
 
-```bash
-pnpm preview
 ```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+app/
+  components/    -- UI components
+  composables/   -- Vue composables
+  database/      -- Dexie schema + repositories
+  layouts/       -- Nuxt layouts
+  pages/         -- Page components
+  plugins/       -- Nuxt plugins
+  services/      -- API abstraction layer
+  stores/        -- Pinia stores
+public/          -- Static assets
+tests/           -- Test files
+types/           -- Type definitions
+```
