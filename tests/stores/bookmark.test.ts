@@ -22,7 +22,7 @@ describe('useBookmarkStore', () => {
     await store.loadAll()
 
     expect(store.bookmarks).toHaveLength(1)
-    expect(store.bookmarks[0].word).toBe('hello')
+    expect(store.bookmarks[0]!.word).toBe('hello')
   })
 
   it('should remove a bookmark', async () => {

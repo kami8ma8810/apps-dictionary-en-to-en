@@ -1,7 +1,7 @@
 /** Free Dictionary API - phonetic entry */
 interface Phonetic {
   text?: string
-  audio: string
+  audio?: string
   sourceUrl?: string
   license?: License
 }

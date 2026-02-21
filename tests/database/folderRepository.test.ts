@@ -23,8 +23,8 @@ describe('folderRepository', () => {
       await folderRepository.add('Second')
 
       const folders = await folderRepository.getAll()
-      expect(folders[0].order).toBe(0)
-      expect(folders[1].order).toBe(1)
+      expect(folders[0]!.order).toBe(0)
+      expect(folders[1]!.order).toBe(1)
     })
 
     it('should not allow duplicate names', async () => {
@@ -60,8 +60,8 @@ describe('folderRepository', () => {
 
       const all = await folderRepository.getAll()
       expect(all).toHaveLength(2)
-      expect(all[0].name).toBe('B Folder')
-      expect(all[1].name).toBe('A Folder')
+      expect(all[0]!.name).toBe('B Folder')
+      expect(all[1]!.name).toBe('A Folder')
     })
   })
 
@@ -74,8 +74,8 @@ describe('folderRepository', () => {
       await folderRepository.reorder(id1, 1)
 
       const all = await folderRepository.getAll()
-      expect(all[0].name).toBe('Second')
-      expect(all[1].name).toBe('First')
+      expect(all[0]!.name).toBe('Second')
+      expect(all[1]!.name).toBe('First')
     })
   })
 })

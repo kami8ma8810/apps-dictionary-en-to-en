@@ -43,7 +43,7 @@ describe('FreeDictionaryApi', () => {
       const result = await api.search('hello')
       expect(result.word).toBe('hello')
       expect(result.entries).toHaveLength(1)
-      expect(result.entries[0].meanings[0].partOfSpeech).toBe('exclamation')
+      expect(result.entries[0]!.meanings[0]!.partOfSpeech).toBe('exclamation')
     })
 
     it('should throw an error for a word not found (404)', async () => {

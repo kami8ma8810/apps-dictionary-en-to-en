@@ -29,7 +29,7 @@ describe('historyRepository', () => {
 
       const entries = await db.searchHistory.where('word').equals('hello').toArray()
       expect(entries).toHaveLength(1)
-      expect(entries[0].searchedAt.getTime()).toBeGreaterThanOrEqual(entry1!.searchedAt.getTime())
+      expect(entries[0]!.searchedAt.getTime()).toBeGreaterThanOrEqual(entry1!.searchedAt.getTime())
     })
   })
 
@@ -41,8 +41,8 @@ describe('historyRepository', () => {
 
       const recent = await historyRepository.getRecent(10)
       expect(recent).toHaveLength(3)
-      expect(recent[0].word).toBe('cherry')
-      expect(recent[2].word).toBe('apple')
+      expect(recent[0]!.word).toBe('cherry')
+      expect(recent[2]!.word).toBe('apple')
     })
 
     it('should limit the number of results', async () => {

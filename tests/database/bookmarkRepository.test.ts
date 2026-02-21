@@ -57,8 +57,8 @@ describe('bookmarkRepository', () => {
       const all = await bookmarkRepository.getAll()
       expect(all).toHaveLength(3)
       // Most recent first
-      expect(all[0].word).toBe('cherry')
-      expect(all[2].word).toBe('apple')
+      expect(all[0]!.word).toBe('cherry')
+      expect(all[2]!.word).toBe('apple')
     })
   })
 
@@ -70,7 +70,7 @@ describe('bookmarkRepository', () => {
 
       const result = await bookmarkRepository.getByFolder(1)
       expect(result).toHaveLength(1)
-      expect(result[0].word).toBe('apple')
+      expect(result[0]!.word).toBe('apple')
     })
   })
 

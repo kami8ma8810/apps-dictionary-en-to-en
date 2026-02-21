@@ -21,7 +21,7 @@ describe('useFolderStore', () => {
     await store.loadAll()
 
     expect(store.folders).toHaveLength(1)
-    expect(store.folders[0].name).toBe('Vocabulary')
+    expect(store.folders[0]!.name).toBe('Vocabulary')
   })
 
   it('should remove a folder', async () => {
@@ -29,7 +29,7 @@ describe('useFolderStore', () => {
     await store.add('Vocabulary')
     await store.loadAll()
 
-    const folderId = store.folders[0].id!
+    const folderId = store.folders[0]!.id!
     await store.remove(folderId)
     await store.loadAll()
 
@@ -41,10 +41,10 @@ describe('useFolderStore', () => {
     await store.add('Old Name')
     await store.loadAll()
 
-    const folderId = store.folders[0].id!
+    const folderId = store.folders[0]!.id!
     await store.rename(folderId, 'New Name')
     await store.loadAll()
 
-    expect(store.folders[0].name).toBe('New Name')
+    expect(store.folders[0]!.name).toBe('New Name')
   })
 })

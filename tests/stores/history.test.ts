@@ -22,8 +22,8 @@ describe('useHistoryStore', () => {
     await store.loadRecent()
 
     expect(store.entries).toHaveLength(2)
-    expect(store.entries[0].word).toBe('world')
-    expect(store.entries[1].word).toBe('hello')
+    expect(store.entries[0]!.word).toBe('world')
+    expect(store.entries[1]!.word).toBe('hello')
   })
 
   it('should remove a history entry', async () => {
@@ -31,7 +31,7 @@ describe('useHistoryStore', () => {
     await store.add('hello')
     await store.loadRecent()
 
-    const entryId = store.entries[0].id!
+    const entryId = store.entries[0]!.id!
     await store.remove(entryId)
     await store.loadRecent()
 
